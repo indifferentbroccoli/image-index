@@ -1,5 +1,15 @@
 # Indifferent Broccoli image index
 
+## Deploying the website
+
+The website is deployed on GitHub Pages. To deploy the website, run the following command (on the main branch):
+
+```bash
+npm run deploy
+```
+
+### Other commands
+
 ### `npm start`
 
 Runs the app in the development mode.\
