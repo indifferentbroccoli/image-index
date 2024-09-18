@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repos with Docker Pull Counts</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function GitHubRepos() {
+            const [repos, setRepos] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                // Fetch GitHub repos
+                async function fetchGitHubRepos() {
+                    try {
+                        const githubResponse = await fetch('https://api.github.com/orgs/indifferentbroccoli/repos');
+                        const githubRepos = await githubResponse.json();
+
+                        // Fetch Docker pull counts
+                        const reposWithDockerPulls = await Promise.all(githubRepos.map(async (repo) => {
+                            const dockerResponse = await fetch(`https://hub.docker.com/v2/repositories/indifferentbroccoli/${repo.name}`);
+                            const dockerData = await dockerResponse.json();
+
+                            return {
+                                name: repo.name,
+                                description: repo.description,
+                                dockerPullCount: dockerData.pull_count || 'N/A'
+                            };
+                        }));
+
+                        setRepos(reposWithDockerPulls);
+                        setLoading(false);
+                    } catch (error) {
+                        console.error('Error fetching repos:', error);
+                    }
+                }
+
+                fetchGitHubRepos();
+            }, []);
+
+            if (loading) {
+                return <p>Loading...</p>;
+            }
+
+            return (
+                <div>
+                    <h1>Indifferent Broccoli GitHub Repositories</h1>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Repository Name</th>
+                                <th>Description</th>
+                                <th>Docker Pull Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {repos.map((repo) => (
+                                <tr key={repo.name}>
+                                    <td>{repo.name}</td>
+                                    <td>{repo.description}</td>
+                                    <td>{repo.dockerPullCount}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<GitHubRepos />, document.getElementById('root'));
+    </script>
+</body>
+</html>
