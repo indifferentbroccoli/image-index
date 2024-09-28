@@ -37,7 +37,9 @@ const App = () => {
   return (
     <div className="container">
       <header className="header">
-        <img src="/logo.png" alt="Logo" className="logo" />
+        <a href="https://indifferentbroccoli.com">
+          <img src="/logo.png" alt="Logo" className="logo" />
+        </a>
       </header>
       <h1 className="my-4">Indifferent Broccoli (:|) Image Index</h1>
       <p>To give back to the community, we're also launching broccoli Open Source Software (bOSS) to make it easier for players to host game servers for free on their own hardware.</p>
