@@ -62,13 +62,13 @@ const App = () => {
               <td>{repo.description || 'No description'}</td>
               <td>
                 <img
-                  src={`https://img.shields.io/github/stars/indifferentbroccoli/${repo.name}?style=for-the-badge&color=6aa84f`}
+                  src={`https://img.shields.io/github/stars/${repo.owner.login}/${repo.name}?style=for-the-badge&color=6aa84f`}
                   alt={`${repo.name} GitHub stars`}
                 />
               </td>
               <td>
                 <img
-                  src={`https://img.shields.io/docker/pulls/indifferentbroccoli/${repo.name}?style=for-the-badge&color=6aa84f`}
+                  src={`https://img.shields.io/docker/pulls/${repo.owner.login}/${repo.name}?style=for-the-badge&color=6aa84f`}
                   alt={`${repo.name} Docker pulls`}
                 />
               </td>
