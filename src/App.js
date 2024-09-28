@@ -9,14 +9,24 @@ const App = () => {
     // Function to fetch repositories from the GitHub API
     const fetchRepos = async () => {
       try {
-        const response = await axios.get(
-          'https://api.github.com/orgs/indifferentbroccoli/repos'
-        );
-        const reposData = response.data;
-        const filteredRepos = reposData.filter(repo => repo.name.endsWith('server-docker'));
-        setRepos(filteredRepos);
+        // Fetch repos from indifferentbroccoli organization and thijsvanloef
+        const [orgResponse, palworldResponse] = await Promise.all([
+          axios.get('https://api.github.com/orgs/indifferentbroccoli/repos'),
+          axios.get('https://api.github.com/repos/thijsvanloef/palworld-server-docker')
+        ]);
+  
+        const orgReposData = orgResponse.data;
+        const palworldRepoData = [palworldResponse.data]; // Convert to array to merge with orgReposData
+  
+        // Filter indifferentbroccoli repos that end with 'server-docker'
+        const filteredOrgRepos = orgReposData.filter(repo => repo.name.endsWith('server-docker'));
+  
+        // Combine the filtered indifferentbroccoli repos with the palworld repo
+        const combinedRepos = [...filteredOrgRepos, ...palworldRepoData];
+  
+        setRepos(combinedRepos);
 
-      } catch (error) {
+    } catch (error) {
         console.error('Error fetching repos:', error);
       }
     };
